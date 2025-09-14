@@ -239,40 +239,6 @@ services:
       retries: 5
     restart: unless-stopped
 
-  # --- Flink JobManager ---
-  flink-jobmanager:
-    image: flink:1.18-java11
-    hostname: flink-jobmanager
-    container_name: lakehouse-flink-jobmanager
-    ports:
-      - "8082:8081"  # Changed to avoid conflict with Schema Registry
-    command: jobmanager
-    volumes:
-      - flink-checkpoints:/tmp/flink-checkpoints
-      - flink-savepoints:/tmp/flink-savepoints
-      - ./flink-jobs:/opt/flink/jobs
-      - ./configs/flink/flink.properties:/opt/flink/conf/flink-conf.yaml
-    networks:
-      - lakehouse-network
-    restart: unless-stopped
-
-  # --- Flink TaskManager ---
-  flink-taskmanager:
-    image: flink:1.18-java11
-    hostname: flink-taskmanager
-    container_name: lakehouse-flink-taskmanager
-    depends_on:
-      - flink-jobmanager
-    command: taskmanager
-    deploy:
-      replicas: 2
-    volumes:
-      - flink-checkpoints:/tmp/flink-checkpoints
-      - flink-savepoints:/tmp/flink-savepoints
-      - ./configs/flink/flink.properties:/opt/flink/conf/flink-conf.yaml
-    networks:
-      - lakehouse-network
-    restart: unless-stopped
 
   # --- Spark Master ---
   spark-master:
@@ -769,10 +735,6 @@ volumes:
 
   # Processing
   metastore-db-data:
-    driver: local
-  flink-checkpoints:
-    driver: local
-  flink-savepoints:
     driver: local
   spark-data:
     driver: local
