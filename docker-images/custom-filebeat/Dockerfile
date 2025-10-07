@@ -1,7 +1,7 @@
 # Custom Filebeat Image with additional modules
 # Build with: docker build -t lakehouse/custom-filebeat:latest docker-images/custom-filebeat/
 
-FROM docker.elastic.co/beats/filebeat:8.11.0
+FROM elastic/filebeat:8.19.3
 
 USER root
 
